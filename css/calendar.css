@@ -5,7 +5,10 @@
     width: 100%;
     padding: 5rem 1rem;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    box-sizing: border-box;
   }
   
   /* Calendar Container with glassy effect */
@@ -16,10 +19,22 @@
     padding: 3rem;
     border-radius: 2.5rem;
     box-shadow: 0 15px 50px rgba(0, 0, 50, 0.5);
-    max-width: 11000px; /* larger width */
+    max-width: 1600px;
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
+  }
+
+  @media (max-width: 600px) {
+    .calendar-container {
+      padding: 0.75rem;
+      border-radius: 1.25rem;
+    }
+    .calendar-section .calendar-container iframe {
+      border-radius: 0.75rem;
+    }
   }
   
   .calendar-container iframe {
@@ -28,4 +43,3 @@
     height: 800px; /* increased height */
     box-shadow: 0 8px 30px rgba(0,0,0,0.35);
   }
-  

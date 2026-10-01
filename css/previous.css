@@ -279,3 +279,21 @@
     opacity: 1 !important;
     transform: translateY(0) !important;
   }
+/* Locally hosted presentation; original slide artwork is preserved. */
+.gallery-item img { display:block; width:100%; height:auto; }
+.gallery-controls { align-items:center; flex-wrap:wrap; }
+.presentation-download { text-align:center; margin-top:1.5rem; }
+.presentation-download a { color:#accaff; }
+.slide-text { padding:1rem; background:#13233e; line-height:1.7; }
+.slide-text summary { cursor:pointer; }
+.slide-text p { margin-top:0.75rem; }
+@media(max-width:600px) {
+  .gallery { padding:2rem 0.75rem; }
+  .gallery-grid { grid-template-columns:minmax(0,1fr); }
+  .gallery-container h2 { font-size:1.6rem; }
+  .hero h1 { font-size:clamp(1.5rem,6vw,4rem); white-space:normal; }
+}
+
+.gallery-item iframe { display:block; height:auto; aspect-ratio:16/10; min-height:250px; }
+.gallery-item:hover { transform:none; }
+.gallery-btn:disabled { opacity:.4; cursor:default; transform:none; }

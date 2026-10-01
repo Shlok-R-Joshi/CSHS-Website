@@ -4,11 +4,14 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Computer Science Honor Society</title>
   <link rel="stylesheet" href="../css/index.css">
   <link rel="stylesheet" href="../css/CSW.css">
   <script defer src="../js/CSW.js"></script>
+  <script defer src="../js/csw-booking-config.js?v=hcps-20260929"></script>
+  <script defer src="../js/csw-booking-embed.js?v=hcps-20260929"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" type="image/x-icon" href="/images/../images/CSHSlogo.png">
@@ -45,7 +48,7 @@
     </nav>
   </header>
 
-  <main class="hero">
+  <main class="hero" id="hero">
     <video autoplay muted loop playsinline class="background-video">
       <source src="../images/CSHSbk.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -59,38 +62,23 @@
     <div id="scroll-arrow">&#x25BC;</div>   
   </main>
 <!--HERO END CONTENT START-->
-<br>
-    <br><br>
-    <br><br>
-    <br><br>
-   
-    
-
+    <section class="booking-section" id="signup" aria-label="CS Wednesday lunch signup">
+      <p class="setup-notice" id="csw-setup-notice" role="status" aria-live="polite">Signup preview — calendar connection is being set up. No reservations are being accepted yet.</p>
+      <iframe id="csw-booking" title="Choose a CS Wednesday and reserve lunch"></iframe>
+      <p class="booking-fallback"><a id="csw-open-form" target="_blank" rel="noopener">Open signup in a separate tab</a></p>
+      <noscript>Please enable JavaScript to see the signup calendar. Contact a CSHS officer for help.</noscript>
+    </section>
     <section class="cs-wednesday" id="cs-wednesday">
       <div class="cs-wednesday-container">
-        <div class="volunteer-card">
-          <h2>Complete form to host a CS Wednesday:</h2>
-          <p><a href="https://tinyurl.com/CS-Wednesdays" target="_blank">tinyurl.com/CS-Wednesdays</a></p>
-          <img src="../images/CSHSqr.jpg" alt="QR Code" class="qr-code">
-        </div>
         <div class="gallery-section">
-          <h2 id="typewriter">Previous CS Wednesdays</h2>
+          <h2>Previous CS Wednesdays</h2>
           <br>
           <div class="gallery-grid">
             <div class="gallery-item">
-              <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRhoZnlY7aU9bgNu1VCBHh7x3FU6XnjhQpWqfIVsTUrNvzp8ZSQ1BO2YyyB-_mDWQ/pubembed?" allowfullscreen></iframe>
-            </div>
-            <div class="gallery-item">
-              <iframe src="https://docs.google.com/presentation/d/e/EXAMPLE2/embed" allowfullscreen></iframe>
-            </div>
-            <div class="gallery-item">
-              <iframe src="https://docs.google.com/presentation/d/e/EXAMPLE3/embed" allowfullscreen></iframe>
+              <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRhoZnlY7aU9bgNu1VCBHh7x3FU6XnjhQpWqfIVsTUrNvzp8ZSQ1BO2YyyB-_mDWQ/pubembed?" title="Previous CS Wednesday presentation" loading="lazy" allowfullscreen></iframe>
             </div>
           </div>
-          <div class="gallery-controls">
-            <button class="gallery-btn" onclick="prevSlide()">Previous</button>
-            <button class="gallery-btn" onclick="nextSlide()">Next</button>
-          </div>
+
         </div>
       </div>
     </section>

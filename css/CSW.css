@@ -345,3 +345,21 @@ footer {
     width: 100%;
   }
 }
+
+/* Booking uses the existing dark surface, Poppins, blue accents and rounded cards. */
+.booking-section { max-width: 1248px; margin: 0 auto; padding: 4rem 24px 0; scroll-margin-top: 100px; }
+.booking-section iframe { display: block; width: 100%; height: 1210px; border: 1px solid #2d3543; border-radius: 12px; background: #080a0e; scroll-margin-top: 100px; }
+.setup-notice { border-left: 3px solid #ff9900; padding: 12px 16px; margin-bottom: 16px; color: #ffe1ae; background: #282115; font-weight: 400; font-size: 14px; }
+.setup-notice[hidden] { display: none; }
+.booking-fallback { margin-top: 12px; font-size: 13px; }
+.booking-fallback a { color: #accaff; }
+.cs-wednesday h2 { font-weight: 600; margin-bottom: 16px; }
+@media (max-width: 1000px) { .booking-section iframe { height: 2150px; } }
+@media (max-width: 768px) {
+  .booking-section { padding: 2rem 12px 0; }
+  .hero { padding: 8rem 1rem; }
+  .hero h1 { font-size: clamp(2rem, 9vw, 4rem); white-space: normal; }
+  .hero p { font-size: 1.1rem; }
+  .gallery-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { #scroll-arrow { animation: none; } }

@@ -36,6 +36,9 @@ let currentSlide = 0;
 const slides = document.querySelectorAll('.gallery-item');
 
 function showSlide(index) {
+  document.getElementById('slide-counter').textContent = `Presentation ${index + 1} of ${slides.length}`;
+  document.getElementById('previous-slide').disabled = slides.length <= 1;
+  document.getElementById('next-slide').disabled = slides.length <= 1;
   slides.forEach((slide, i) => {
     slide.style.display = i === index ? 'block' : 'none';
   });

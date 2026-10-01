@@ -45,22 +45,7 @@ document.getElementById('menu-toggle').addEventListener('click', () => {
 
 
 
-// NAVBAR
-
-  const toggle = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('.nav');
-  
-  toggle.addEventListener('click', () => {
-    nav.classList.toggle('show');
-  });
-  
-
-// NAVBAR
-
-
-
-
-  // ARROW CODE
+// ARROW CODE
 
 
 
@@ -83,4 +68,4 @@ const observer = new IntersectionObserver(entries => {
   threshold: 0.1
 });
 
-observer.observe(heroSection);
+if (heroSection) observer.observe(heroSection);

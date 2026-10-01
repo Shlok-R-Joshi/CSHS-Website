@@ -4,6 +4,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Computer Science Honor Society</title> 
   <link rel="stylesheet" href="../css/index.css">
@@ -46,7 +47,7 @@
     </nav>
   </header>
 
-  <main class="hero">
+  <main class="hero" id="hero">
     <video autoplay muted loop playsinline class="background-video">
       <source src="../images/CSHSbk.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -66,24 +67,20 @@
     <br><br>
    
 
-    <section class="gallery" id="gallery">
+    <section class="gallery" id="gallery" aria-label="September 2026 meeting presentation">
       <div class="gallery-container">
-        <h2 id="typewriter">Presentation Gallery</h2>
+        <h2>Presentation Gallery</h2>
         <div class="gallery-grid">
           <div class="gallery-item">
-            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRSzirxI5HVTnqrC087pzTdG4xfQw20XyRfpJKSX5NATyz2ZIjNhVLr3gYNzN-QxRllYaMM-6juedEF/pubembed?" allowfullscreen></iframe>
-          </div>
-          <div class="gallery-item">
-            <iframe src= "https://docs.google.com/presentation/d/e/2PACX-1vTsx9E3jec3-HuJ92CcCHbnI6Vj1-dQh22FGhmtjw0FBFCI7-BUC_JsVYJl_mfQDO4sCT3z_jasBp4S/pubembed?"></iframe>
-          </div>
-          <div class="gallery-item">
-            <iframe src= allowfullscreen></iframe>
+            <iframe src="../presentations/2026-september/viewer.html" title="September 2026 CSHS Meeting slideshow" allowfullscreen></iframe>
           </div>
         </div>
         <div class="gallery-controls">
-          <button class="gallery-btn" onclick="prevSlide()">Previous</button>
-          <button class="gallery-btn" onclick="nextSlide()">Next</button>
+          <button class="gallery-btn" id="previous-slide" onclick="prevSlide()" aria-label="Previous presentation">Previous</button>
+          <span id="slide-counter" role="status" aria-live="polite"></span>
+          <button class="gallery-btn" id="next-slide" onclick="nextSlide()" aria-label="Next presentation">Next</button>
         </div>
+        <p class="presentation-download"><a href="../presentations/2026-september/2026-CSHS-September-Meeting.pptx" download>Download PowerPoint</a></p>
       </div>
     </section>
 
