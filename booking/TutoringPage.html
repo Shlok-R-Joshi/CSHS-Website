@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CS Tutoring</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #10151e;
+        color: #f2f5ff;
+        font:
+          16px/1.6 Arial,
+          sans-serif;
+        padding: 24px;
+      }
+      main {
+        max-width: 980px;
+        margin: auto;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0 0 14px;
+      }
+      h1 {
+        font-size: 30px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      h3 {
+        font-size: 18px;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #526079;
+        border-radius: 7px;
+        background: #172130;
+        color: white;
+      }
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      label {
+        display: block;
+        margin-bottom: 14px;
+      }
+      button {
+        border: 1px solid #6683ac;
+        border-radius: 7px;
+        padding: 10px 17px;
+        background: #243b5e;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #355685;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #9ac4ff;
+        outline-offset: 3px;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      a {
+        color: #a7ccff;
+      }
+      small,
+      .muted {
+        color: #b7c5d9;
+      }
+      section,
+      .card {
+        padding: 22px;
+        border: 1px solid #354359;
+        border-radius: 12px;
+        margin: 18px 0;
+        background: #141d29;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .row > * {
+        flex: 1;
+        min-width: 140px;
+      }
+      .row button {
+        flex: 0 1 auto;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+      .tabs button[aria-pressed="true"] {
+        background: #c7e0ff;
+        color: #10151e;
+      }
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .choice input {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      fieldset {
+        border: 1px solid #46556d;
+        border-radius: 8px;
+        margin: 0 0 18px;
+        padding: 15px;
+        min-width: 0;
+      }
+      .availability {
+        overflow: auto;
+      }
+      .availability table {
+        width: 100%;
+        min-width: 450px;
+        text-align: center;
+        border-collapse: collapse;
+      }
+      .availability th,
+      .availability td {
+        padding: 8px;
+        border-bottom: 1px solid #34445b;
+      }
+      .availability input {
+        width: 20px;
+        height: 20px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: bold;
+        padding: 8px 0;
+      }
+      details p {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      details + details {
+        border-top: 1px solid #354359;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 5px;
+        background: #29405a;
+        font-size: 13px;
+        margin-left: 8px;
+      }
+      .pending {
+        background: #594221;
+      }
+      .approved,
+      .active {
+        background: #174b43;
+      }
+      #message {
+        padding: 12px;
+        border-left: 4px solid #86bfff;
+        white-space: pre-wrap;
+      }
+      #message:empty {
+        display: none;
+      }
+      #demo {
+        background: #594221;
+        padding: 12px;
+        border-radius: 7px;
+        margin-bottom: 20px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .toolbar {
+        justify-content: space-between;
+      }
+      .toolbar > * {
+        flex: 0 1 auto;
+      }
+      .danger {
+        background: #522c35;
+      }
+      @media (max-width: 550px) {
+        body {
+          padding: 12px;
+        }
+        section,
+        .card {
+          padding: 16px;
+        }
+        .row > * {
+          flex: 1 1 100%;
+        }
+        h1 {
+          font-size: 26px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p id="demo" hidden>
+        <strong>Demo only.</strong> Sample people and sessions. Nothing is saved
+        or emailed; refreshing resets the demo.
+      </p>
+      <h1>CS Tutoring</h1>
+      <p class="muted">
+        Get help from a student who has taken your course, or volunteer as a
+        tutor.
+      </p>
+      <div id="message" role="status" aria-live="polite"></div>
+      <section id="verification">
+        <h2>Verify your school email</h2>
+        <form id="send-code">
+          <label
+            >School email<input
+              id="email"
+              type="email"
+              placeholder="hcps-name@henricostudents.org"
+              required
+              autocomplete="email" /></label
+          ><button>Send code</button>
+        </form>
+        <form id="check-code" hidden>
+          <label
+            >6-digit code<input
+              id="code"
+              inputmode="numeric"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              required
+              autocomplete="one-time-code" /></label
+          ><button>Verify</button>
+        </form>
+      </section>
+      <div id="workspace" hidden>
+        <div class="row toolbar">
+          <p id="signed-in" class="muted"></p>
+          <button id="signout">Sign out</button>
+        </div>
+        <div class="tabs" aria-label="Tutoring pages">
+          <button data-page="help" aria-pressed="true">Get help</button
+          ><button data-page="volunteer" aria-pressed="false">
+            Become a tutor</button
+          ><button data-page="mine" aria-pressed="false">My sessions</button
+          ><button
+            data-page="organizer"
+            aria-pressed="false"
+            id="admin-tab"
+            hidden
+          >
+            Manage tutoring
+          </button>
+        </div>
+        <section id="help" class="page">
+          <h2>Request tutoring</h2>
+          <p class="muted">
+            We’ll email you when your request is matched and approved.
+          </p>
+          <form id="help-form">
+            <label
+              >First and last name<input
+                name="name"
+                maxlength="100"
+                required
+                autocomplete="name"
+            /></label>
+            <label
+              >Course<select name="course" class="course" required></select
+            ></label>
+            <label class="other-course" hidden
+              >Other course name<input name="other" maxlength="80"
+            /></label>
+            <label
+              >What do you need help with?<textarea
+                name="details"
+                maxlength="1000"
+                placeholder="For example: tracing nested if statements and reviewing Boolean expressions."
+                required
+              ></textarea>
+            </label>
+            <label
+              >Preferred date<input name="date" type="date" required
+            /></label>
+            <fieldset>
+              <legend>When are you available?</legend>
+              <div class="availability" id="student-times"></div>
+            </fieldset>
+            <p class="muted">
+              Your request stays private. Changes or cancellation:
+              <a href="mailto:hcps-joshisr1@henricostudents.org">email Shlok</a
+              >.
+            </p>
+            <button>Submit request</button>
+          </form>
+        </section>
+        <section id="volunteer" class="page" hidden>
+          <h2>Become a tutor</h2>
+          <p class="muted">
+            Earn 1 service point per hour. Matches depend on how many students
+            need help.
+          </p>
+          <form id="tutor-form">
+            <label
+              >First and last name<input
+                name="name"
+                maxlength="100"
+                required
+                autocomplete="name"
+            /></label>
+            <fieldset>
+              <legend>Courses you have taken and can tutor</legend>
+              <div id="tutor-courses"></div>
+              <label
+                >Another completed CS course (optional)<input
+                  name="other"
+                  maxlength="80"
+              /></label>
+            </fieldset>
+            <fieldset>
+              <legend>When are you available?</legend>
+              <div class="availability" id="tutor-times"></div>
+            </fieldset>
+            <label class="choice"
+              ><input name="completed" type="checkbox" required />I have already
+              taken every course selected above.</label
+            ><button>Register as a tutor</button>
+          </form>
+        </section>
+        <section id="mine" class="page" hidden>
+          <div class="row toolbar">
+            <h2>My sessions &amp; registration</h2>
+            <button class="refresh">Refresh</button>
+          </div>
+          <div id="my-list"></div>
+        </section>
+        <section id="organizer" class="page" hidden>
+          <div class="row toolbar">
+            <h2>Manage tutoring</h2>
+            <button class="refresh">Refresh</button>
+          </div>
+          <label
+            >Show<select id="filter">
+              <option value="pending">Needs a match</option>
+              <option value="approved">Approved sessions</option>
+              <option value="active">Available tutors</option>
+              <option value="history">History</option>
+              <option value="delivery">Email &amp; invite issues</option>
+            </select></label
+          >
+          <p id="count" class="muted"></p>
+          <div id="admin-list"></div>
+          <details>
+            <summary>Officer access</summary>
+            <p>
+              Uses the same officer access as CS Wednesdays. The owner approves
+              matches; managers can cancel sessions and record attendance.
+              Viewers can only read.
+            </p>
+            <a
+              href="https://drhscit.org/cshs/html/CSW.html?manage=1#signup"
+              target="_blank"
+              rel="noopener"
+              >Manage officer access</a
+            >
+          </details>
+        </section>
+      </div>
+      <script>
+        (() => {
+          const $ = (id) => document.getElementById(id);
+          const courses = [
+            "AP Computer Science Principles",
+            "AP Computer Science A",
+            "Application Development",
+            "Intro to Programming",
+          ];
+          const periods = [
+            "A lunch",
+            "B lunch",
+            "Before school",
+            "After school",
+          ];
+          const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+          const live =
+            typeof google !== "undefined" && google.script && google.script.run;
+          const demo =
+            !live && new URLSearchParams(location.search).get("demo") === "1";
+          let token = "",
+            model = { records: [], role: "" },
+            busy = false;
+          let requestId = crypto.randomUUID(),
+            tutorId = crypto.randomUUID();
+          const sampleDate = new Date();
+          sampleDate.setDate(sampleDate.getDate() + 7);
+          while ([0, 6].includes(sampleDate.getDay()))
+            sampleDate.setDate(sampleDate.getDate() + 1);
+          const date = sampleDate.toISOString().slice(0, 10);
+          const sampleTimes = days.flatMap((_, i) =>
+            periods.map((_, j) => `${i + 1}:${j}`),
+          );
+          let demoRecords = [
+            {
+              id: "demo-tutor",
+              kind: "tutor",
+              name: "Alex Chen",
+              email: "demo-tutor@henricostudents.org",
+              courses: [courses[1]],
+              availability: sampleTimes,
+              status: "active",
+              mail: [],
+            },
+            {
+              id: "demo-request",
+              kind: "request",
+              name: "Jordan Lee",
+              email: "demo-student@henricostudents.org",
+              course: courses[1],
+              details:
+                "I need help tracing nested if statements.\nCan we work through a few examples?",
+              requestedDate: date,
+              availability: sampleTimes,
+              status: "pending",
+              mail: [],
+            },
+          ];
+          function element(tag, text, className) {
+            const e = document.createElement(tag);
+            if (text !== undefined) e.textContent = text;
+            if (className) e.className = className;
+            return e;
+          }
+          function option(select, value, text) {
+            const o = element("option", text);
+            o.value = value;
+            select.append(o);
+          }
+          function message(text) {
+            $("message").textContent = text;
+          }
+          function confirmAction(text) {
+            return new Promise((resolve) => {
+              const dialog = document.createElement("dialog");
+              dialog.style.cssText = "background:#182231;color:#fff;border:1px solid #53677f;border-radius:14px;padding:24px;max-width:420px";
+              const prompt = document.createElement("p");
+              prompt.textContent = text;
+              dialog.append(prompt);
+              function finish(answer) { dialog.close(); dialog.remove(); resolve(answer); }
+              [ ["Keep unchanged", false], ["Confirm", true] ].forEach(([label, answer]) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.textContent = label;
+                button.style.marginRight = "10px";
+                button.onclick = () => finish(answer);
+                dialog.append(button);
+              });
+              dialog.addEventListener("cancel", (event) => { event.preventDefault(); finish(false); });
+              document.body.append(dialog);
+              dialog.showModal();
+            });
+          }
+          async function action(fn) {
+            if (busy) return;
+            busy = true;
+            document
+              .querySelectorAll("button")
+              .forEach((b) => (b.disabled = true));
+            try {
+              message("");
+              await fn();
+            } catch (e) {
+              if (
+                /Verification expired|Verify your school email/.test(
+                  e.message || "",
+                )
+              ) {
+                token = "";
+                model = { records: [], role: "" };
+                $("workspace").hidden = true;
+                $("verification").hidden = false;
+                $("my-list").replaceChildren();
+                $("admin-list").replaceChildren();
+              }
+              message(e.message || String(e));
+            } finally {
+              busy = false;
+              document
+                .querySelectorAll("button")
+                .forEach((b) => (b.disabled = false));
+            }
+          }
+          function call(method, ...args) {
+            if (demo) return demoCall(method, ...args);
+            if (!live)
+              return Promise.reject(
+                new Error(
+                  "Tutoring is not connected yet. Contact a CSHS officer.",
+                ),
+              );
+            return new Promise((resolve, reject) => {
+              const timer = setTimeout(
+                () =>
+                  reject(
+                    new Error(
+                      "The server is taking longer than expected. Refresh My sessions before submitting again.",
+                    ),
+                  ),
+                30000,
+              );
+              google.script.run
+                .withSuccessHandler((r) => {
+                  clearTimeout(timer);
+                  resolve(r);
+                })
+                .withFailureHandler((e) => {
+                  clearTimeout(timer);
+                  reject(e);
+                })
+                [method](...args);
+            });
+          }
+          async function demoCall(method, ...args) {
+            const input = args[0];
+            if (method === "tutoringDashboard")
+              return {
+                email: "demo-owner@henricostudents.org",
+                role: "owner",
+                records: structuredClone(demoRecords),
+              };
+            if (method === "tutoringSubmit") {
+              const r = {
+                ...input,
+                id: crypto.randomUUID(),
+                email: "demo-owner@henricostudents.org",
+                status: input.kind === "tutor" ? "active" : "pending",
+                requestedDate: input.date,
+                mail: [],
+              };
+              demoRecords.push(r);
+              return r;
+            }
+            if (method === "tutoringApprove") {
+              const r = demoRecords.find((r) => r.id === input.id),
+                t = demoRecords.find((r) => r.id === input.tutorId);
+              Object.assign(r, input, {
+                status: "approved",
+                tutorName: t.name,
+                tutorEmail: t.email,
+              });
+              return r;
+            }
+            if (method === "tutoringClose") {
+              const r = demoRecords.find((r) => r.id === args[1]);
+              r.status = {
+                cancel: "cancelled",
+                complete: "completed",
+                deactivate: "inactive",
+              }[args[2]];
+              return r;
+            }
+          }
+          function times(id) {
+            const table = element("table"),
+              head = element("tr");
+            head.append(element("th", "Day"));
+            periods.forEach((p) => head.append(element("th", p)));
+            table.append(head);
+            days.forEach((day, i) => {
+              const row = element("tr");
+              row.append(element("th", day));
+              periods.forEach((p, j) => {
+                const cell = element("td"),
+                  input = element("input");
+                input.type = "checkbox";
+                input.value = `${i + 1}:${j}`;
+                input.setAttribute("aria-label", day + " " + p);
+                cell.append(input);
+                row.append(cell);
+              });
+              table.append(row);
+            });
+            $(id).append(table);
+          }
+          function availability(r) {
+            return r.availability
+              .map((s) => {
+                const [day, period] = s.split(":");
+                return days[day - 1] + " " + periods[period];
+              })
+              .join(", ");
+          }
+          function selected(id) {
+            return [...$(id).querySelectorAll("input:checked")].map(
+              (e) => e.value,
+            );
+          }
+          function show(page) {
+            document
+              .querySelectorAll(".page")
+              .forEach((p) => (p.hidden = p.id !== page));
+            document
+              .querySelectorAll("[data-page]")
+              .forEach((b) =>
+                b.setAttribute("aria-pressed", String(b.dataset.page === page)),
+              );
+          }
+          async function refresh() {
+            model = await call("tutoringDashboard", token);
+            $("admin-tab").hidden = !model.role;
+            $("signed-in").textContent = model.email;
+            render();
+          }
+          async function refreshAfterSubmission(text) {
+            show("mine");
+            message(text);
+            try {
+              await refresh();
+            } catch (e) {
+              const nextStep = /Verification expired|Verify your school email/.test(
+                e.message || "",
+              )
+                ? "Verify your school email again to refresh My sessions."
+                : "My sessions could not refresh. Try Refresh when the connection returns.";
+              throw new Error(
+                text + " Your submission is saved; do not submit it again. " + nextStep,
+              );
+            }
+          }
+          function detail(parent, title, text) {
+            const d = element("details");
+            d.append(element("summary", title), element("p", text));
+            parent.append(d);
+          }
+          function makeButton(parent, text, fn, danger = false) {
+            const b = element("button", text, danger ? "danger" : "");
+            b.type = "button";
+            b.onclick = () => action(fn);
+            parent.append(b);
+          }
+          function card(r, admin) {
+            const box = element("article", undefined, "card"),
+              heading = element("h3", r.kind === "tutor" ? r.name : r.course);
+            heading.append(element("span", r.status, "badge " + r.status));
+            box.append(heading);
+            box.append(
+              element(
+                "p",
+                r.kind === "tutor"
+                  ? r.courses.join(", ")
+                  : r.name + " · " + (r.date || r.requestedDate),
+              ),
+            );
+            if (r.start && r.end)
+              box.append(
+                element(
+                  "p",
+                  r.start +
+                    "–" +
+                    r.end +
+                    " Eastern · " +
+                    r.room +
+                    " · Tutor: " +
+                    r.tutorName,
+                ),
+              );
+            if (r.hours)
+              box.append(
+                element(
+                  "p",
+                  r.hours +
+                    " service hours recorded. Submit points through the usual CSHS process.",
+                ),
+              );
+            detail(
+              box,
+              "Details",
+              r.email +
+                "\n" +
+                (r.details || "") +
+                "\n\nAvailability: " +
+                availability(r),
+            );
+            if (r.calendarLink) {
+              const a = element("a", "Calendar invitation");
+              a.href = r.calendarLink;
+              a.target = "_blank";
+              a.rel = "noopener";
+              box.append(a);
+            }
+            if (admin) {
+              if (r.mail.length || r.inviteStatus)
+                detail(
+                  box,
+                  "Email & invitation status",
+                  (r.inviteStatus ? "Calendar: " + r.inviteStatus + "\n" : "") +
+                    r.mail.map((m) => m.label + ": " + m.status).join("\n") +
+                    "\n“Unknown” or “sending” needs an inbox check; it is not resent automatically.",
+                );
+              if (r.status === "pending" && model.role === "owner")
+                matchForm(box, r);
+              if (model.role !== "viewer") {
+                const buttons = element("div", undefined, "row");
+                if (["pending", "approved"].includes(r.status))
+                  makeButton(
+                    buttons,
+                    r.status === "pending"
+                      ? "Decline request"
+                      : "Cancel session",
+                    async () => {
+                      if (
+                        !(await confirmAction(
+                          "Cancel this request and notify the people involved?",
+                        ))
+                      )
+                        return;
+                      await call("tutoringClose", token, r.id, "cancel");
+                      await refresh();
+                      message("Request cancelled.");
+                    },
+                    true,
+                  );
+                if (r.status === "approved")
+                  makeButton(buttons, "Mark attended", async () => {
+                    if (
+                      !(await confirmAction(
+                        "Confirm this session has ended and the tutor attended?",
+                      ))
+                    )
+                      return;
+                    await call("tutoringClose", token, r.id, "complete");
+                    await refresh();
+                    message(
+                      "Attendance recorded. Service points still need to be logged.",
+                    );
+                  });
+                if (r.status === "active")
+                  makeButton(buttons, "Stop new matches", async () => {
+                    if (
+                      !(await confirmAction(
+                        "Stop new matches for this tutor? Existing sessions remain scheduled.",
+                      ))
+                    )
+                      return;
+                    await call("tutoringClose", token, r.id, "deactivate");
+                    await refresh();
+                  });
+                box.append(buttons);
+              }
+            }
+            return box;
+          }
+          function matchForm(parent, r) {
+            const d = element("details"),
+              f = element("form");
+            d.append(element("summary", "Match & approve"));
+            const tutors = model.records.filter(
+              (t) =>
+                t.kind === "tutor" &&
+                t.status === "active" &&
+                t.email !== r.email &&
+                t.courses.includes(r.course) &&
+                t.availability.some((a) => r.availability.includes(a)),
+            );
+            if (!tutors.length) {
+              d.append(
+                element("p", "No available tutor matches this course yet."),
+              );
+              parent.append(d);
+              return;
+            }
+            function field(label, type, name, value = "") {
+              const l = element("label", label),
+                e = element(type === "select" ? "select" : "input");
+              if (type !== "select") e.type = type;
+              e.name = name;
+              e.required = true;
+              if (value) e.value = value;
+              l.append(e);
+              f.append(l);
+              return e;
+            }
+            const tutor = field("Tutor", "select", "tutorId");
+            tutors.forEach((t) => option(tutor, t.id, t.name));
+            const dateInput = field(
+              "Session date",
+              "date",
+              "date",
+              r.requestedDate,
+            );
+            dateInput.min = new Intl.DateTimeFormat("en-CA", {
+              timeZone: "America/New_York",
+            }).format(new Date());
+            const period = field("Shared availability", "select", "period");
+            function updatePeriods() {
+              period.replaceChildren();
+              const t = tutors.find((t) => t.id === tutor.value),
+                day = new Date(dateInput.value + "T12:00:00Z").getUTCDay();
+              periods.forEach((p, i) => {
+                if (
+                  t &&
+                  t.availability.includes(day + ":" + i) &&
+                  r.availability.includes(day + ":" + i)
+                )
+                  option(period, i, p);
+              });
+              if (!period.options.length)
+                option(period, "", "No shared availability on this date");
+            }
+            tutor.onchange = updatePeriods;
+            dateInput.onchange = updatePeriods;
+            updatePeriods();
+            field("Start time (Eastern)", "time", "start");
+            field("End time (Eastern)", "time", "end");
+            field("Room", "text", "room");
+            const label = element("label", undefined, "choice"),
+              check = element("input");
+            check.type = "checkbox";
+            check.required = true;
+            label.append(
+              check,
+              document.createTextNode(
+                "I checked the school calendar, bell times, and room availability.",
+              ),
+            );
+            f.append(label);
+            const approve = element("button", "Approve & send invitations");
+            f.append(approve);
+            f.onsubmit = (e) => {
+              e.preventDefault();
+              action(async () => {
+                const data = Object.fromEntries(new FormData(f));
+                await call("tutoringApprove", {
+                  ...data,
+                  token,
+                  id: r.id,
+                  schoolDayConfirmed: check.checked,
+                });
+                await refresh();
+                message(
+                  "Session approved. Check its delivery status for emails and invitations.",
+                );
+              });
+            };
+            d.append(f);
+            parent.append(d);
+          }
+          function render() {
+            $("my-list").replaceChildren();
+            const mine = model.records.filter(
+              (r) => r.email === model.email || r.tutorEmail === model.email,
+            );
+            if (!mine.length)
+              $("my-list").append(
+                element("p", "No requests or registrations yet."),
+              );
+            mine.forEach((r) => $("my-list").append(card(r, false)));
+            const filter = $("filter").value;
+            const records = model.records.filter((r) =>
+              filter === "history"
+                ? ["cancelled", "completed", "inactive"].includes(r.status)
+                : filter === "delivery"
+                  ? r.inviteStatus === "pending" ||
+                    r.mail.some((m) =>
+                      ["pending", "unknown", "sending"].includes(m.status),
+                    )
+                  : r.status === filter,
+            );
+            $("count").textContent =
+              records.length +
+              " " +
+              (records.length === 1 ? "record" : "records");
+            $("admin-list").replaceChildren();
+            records.forEach((r) => $("admin-list").append(card(r, true)));
+            if (!records.length)
+              $("admin-list").append(element("p", "Nothing here right now."));
+          }
+          times("student-times");
+          times("tutor-times");
+          const select = document.querySelector("select.course");
+          courses.forEach((c) => option(select, c, c));
+          option(select, "Other", "Other");
+          select.onchange = () => {
+            document.querySelector(".other-course").hidden =
+              select.value !== "Other";
+            $("help-form").elements.other.required = select.value === "Other";
+          };
+          courses.forEach((c) => {
+            const l = element("label", undefined, "choice"),
+              i = element("input");
+            i.type = "checkbox";
+            i.value = c;
+            l.append(i, document.createTextNode(c));
+            $("tutor-courses").append(l);
+          });
+          $("help-form").elements.date.min = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/New_York",
+          }).format(new Date());
+          $("send-code").onsubmit = (e) => {
+            e.preventDefault();
+            action(async () => {
+              await call("requestCode", $("email").value);
+              $("check-code").hidden = false;
+              message("Check your school email for a code.");
+            });
+          };
+          $("check-code").onsubmit = (e) => {
+            e.preventDefault();
+            action(async () => {
+              const result = await call(
+                "verifyCode",
+                $("email").value,
+                $("code").value,
+              );
+              token = result.token;
+              await refresh();
+              $("verification").hidden = true;
+              $("workspace").hidden = false;
+            });
+          };
+          $("help-form").onsubmit = (e) => {
+            e.preventDefault();
+            action(async () => {
+              const data = Object.fromEntries(new FormData(e.target));
+              const availability = selected("student-times");
+              if (!availability.length)
+                throw new Error("Choose your availability.");
+              await call("tutoringSubmit", {
+                ...data,
+                course: data.course === "Other" ? data.other : data.course,
+                availability,
+                kind: "request",
+                token,
+                requestId,
+              });
+              requestId = crypto.randomUUID();
+              e.target.reset();
+              select.onchange();
+              await refreshAfterSubmission(
+                "Request submitted. Wait for an approval email before attending.",
+              );
+            });
+          };
+          $("tutor-form").onsubmit = (e) => {
+            e.preventDefault();
+            action(async () => {
+              const data = Object.fromEntries(new FormData(e.target)),
+                choices = selected("tutor-courses");
+              if (data.other.trim()) choices.push(data.other.trim());
+              if (!choices.length)
+                throw new Error("Choose at least one completed course.");
+              const availability = selected("tutor-times");
+              if (!availability.length)
+                throw new Error("Choose your availability.");
+              await call("tutoringSubmit", {
+                name: data.name,
+                courses: choices,
+                availability,
+                completed: true,
+                kind: "tutor",
+                token,
+                requestId: tutorId,
+              });
+              tutorId = crypto.randomUUID();
+              e.target.reset();
+              await refreshAfterSubmission(
+                "Tutor registration received. We’ll email you when a session is approved.",
+              );
+            });
+          };
+          document
+            .querySelectorAll("[data-page]")
+            .forEach((b) => (b.onclick = () => show(b.dataset.page)));
+          document
+            .querySelectorAll(".refresh")
+            .forEach((b) => (b.onclick = () => action(refresh)));
+          $("filter").onchange = render;
+          $("signout").onclick = () => {
+            token = "";
+            model = { records: [], role: "" };
+            $("workspace").hidden = true;
+            $("verification").hidden = false;
+            $("check-code").hidden = true;
+            $("code").value = "";
+            $("my-list").replaceChildren();
+            $("admin-list").replaceChildren();
+            message("Signed out.");
+          };
+          if (demo) {
+            $("demo").hidden = false;
+            $("verification").hidden = true;
+            $("workspace").hidden = false;
+            token = "demo";
+            action(refresh);
+          } else if (!live) {
+            $("verification").hidden = true;
+            message(
+              "Tutoring is not connected yet. Email hcps-joshisr1@henricostudents.org for help.",
+            );
+          }
+          function resize(params) {
+            if (!/^[a-zA-Z0-9-]{36}$/.test(params.embedId || "")) return;
+            const send = () =>
+              window.top.postMessage(
+                {
+                  type: "tutoring:resize",
+                  embedId: params.embedId,
+                  height:
+                    Math.ceil(document.body.getBoundingClientRect().height) +
+                    30,
+                },
+                "*",
+              );
+            new ResizeObserver(send).observe(document.body);
+            send();
+          }
+          if (live)
+            google.script.url.getLocation((loc) => resize(loc.parameter));
+          else resize(Object.fromEntries(new URLSearchParams(location.search)));
+        })();
+      </script>
+    </main>
+  </body>
+</html>

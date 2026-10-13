@@ -1,5 +1,6 @@
 // Public configuration only. Never put credentials or private signup data here.
 window.CSW_BOOKING = {
+  tutoringEnabled: true, // Uses the school-owned tutoring deployment.
   // School-owned signup and calendar. Sign in with an HCPS account.
   webAppUrl:
     'https://script.google.com/a/macros/henricostudents.org/s/AKfycbwYgVT2pCErlo0RmtQFG-ZAAOkMT2StPRUWQQPBRdzZ71bXyG7IqYL7NGSJl91qoogOgw/exec',

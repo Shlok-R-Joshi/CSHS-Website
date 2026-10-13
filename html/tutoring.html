@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CS Tutoring | CSHS</title>
+    <link rel="stylesheet" href="../css/index.css?v=20261012" />
+    <link rel="stylesheet" href="../css/CSW.css" />
+    <link rel="stylesheet" href="../css/booking-embed.css?v=20261012" />
+
+    <script defer src="../js/csw-booking-config.js?v=20261012"></script>
+    <script defer src="../js/signup-links.js?v=20261012"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../images/CSHSlogo.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <!--HERO START-->
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img src="../images/CSHSlogo.png" alt="Logo" />
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="nav" id="nav-menu">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="calendar.html">Calendar</a></li>
+          <li><a href="points.html">View Points</a></li>
+          <li><a href="previous.html">Previous Meetings</a></li>
+          <li><a href="CSW.html">CS Wednesdays</a></li>
+          <li><a href="tutoring.html">CS Tutoring</a></li>
+          <li><a href="media.html">Media</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main style="padding: 130px 20px 30px; max-width: 1100px; margin: auto">
+      <h1>CS Tutoring</h1>
+      <p>Find help with a CS course or volunteer as a tutor.</p>
+      <section class="booking-section" aria-label="CS tutoring signup">
+        <div class="signup-card">
+          <h2>Need help or want to tutor?</h2>
+          <p>Request help with a CS course, or register to tutor a course you’ve already taken.</p>
+          <div class="signup-actions">
+            <a class="signup-button" id="tutoring-open" href="https://script.google.com/a/macros/henricostudents.org/s/AKfycbwYgVT2pCErlo0RmtQFG-ZAAOkMT2StPRUWQQPBRdzZ71bXyG7IqYL7NGSJl91qoogOgw/exec?view=tutoring" target="_blank" rel="noopener">Open CS tutoring ↗</a>
+          </div>
+          <p class="signup-help">Opens in a new tab. Sign in with your HCPS school account.</p>
+          <p class="signup-help">An organizer matches your course and availability. You’ll both receive the session details and a calendar invitation after approval.</p>
+          <p class="signup-help">Changes or cancellation: <a href="mailto:hcps-joshisr1@henricostudents.org">email Shlok</a>.</p>
+          <p id="tutoring-notice" role="status" hidden></p>
+        </div>
+      </section>
+    </main>
+    <script>
+      document
+        .getElementById("menu-toggle")
+        .addEventListener("click", function () {
+          document.getElementById("nav-menu").classList.toggle("show");
+        });
+    </script>
+  </body>
+</html>

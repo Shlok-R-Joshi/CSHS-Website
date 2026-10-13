@@ -19,6 +19,34 @@
 .booking-fallback a {
   color: #accaff;
 }
+.signup-card {
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid #2d3543;
+  border-radius: 16px;
+  background: #10151e;
+  line-height: 1.7;
+}
+.signup-card h2 { margin-bottom: 12px; }
+.signup-card a { color: #accaff; }
+.signup-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 24px 0;
+}
+.signup-actions .signup-button {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 10px;
+  background: #315a9b;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+.signup-button:hover, .signup-button:focus-visible { background: #416fb6; }
+.signup-button[hidden], #csw-booking[hidden] { display: none; }
+.signup-help { font-size: 14px; color: #c3cede; margin-top: 12px; }
 @keyframes logo-pulse {
   to {
     opacity: 0.35;

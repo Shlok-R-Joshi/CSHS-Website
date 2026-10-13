@@ -525,7 +525,7 @@ test('Google iframe load is not treated as connected until actual widget handsha
   vm.runInNewContext(embed, h.context);
   h.get('csw-booking').fire('load');
   assert.equal(h.get('csw-setup-notice').hidden, false);
-  h.fireTimers(20000);
+  h.fireTimers(10000);
   assert.match(h.get('csw-setup-notice').textContent, /HCPS school account/);
   const embedId = new URL(h.get('csw-booking').src).searchParams.get('embedId');
   events.message({

@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Computer Science Honor Society</title>
-    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/index.css?v=20261012" />
     <link rel="stylesheet" href="../css/CSW.css" />
-    <link rel="stylesheet" href="../css/booking-embed.css" />
+    <link rel="stylesheet" href="../css/booking-embed.css?v=20261012" />
     <script defer src="../js/CSW.js"></script>
-    <script defer src="../js/csw-booking-config.js?v=20261005"></script>
-    <script defer src="../js/csw-booking-embed.js?v=20261005-admin"></script>
+    <script defer src="../js/csw-booking-config.js?v=20261012"></script>
+    <script defer src="../js/signup-links.js?v=20261012"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="icon" type="image/x-icon" href="/images/../images/CSHSlogo.png" />
@@ -39,6 +39,7 @@
           <li><a href="points.html">View Points</a></li>
           <li><a href="previous.html">Previous Meetings</a></li>
           <li><a href="CSW.html">CS Wednesdays</a></li>
+          <li><a href="tutoring.html">CS Tutoring</a></li>
           <li><a href="media.html">Media</a></li>
         </ul>
       </nav>
@@ -59,16 +60,16 @@
     </main>
     <!--HERO END CONTENT START-->
     <section class="booking-section" id="signup" aria-label="CS Wednesday lunch signup">
-      <div class="setup-notice" id="csw-setup-notice" role="status" aria-live="polite">
-        <img class="loading-logo" src="../images/CSHSlogo.png" alt="Loading signup" />
+      <div class="signup-card">
+        <h2>Present at CS Wednesday</h2>
+        <p>Choose a Wednesday during A lunch and send us your presentation and activity plan.</p>
+        <div class="signup-actions">
+          <a class="signup-button" id="csw-open-form" href="https://script.google.com/a/macros/henricostudents.org/s/AKfycbwYgVT2pCErlo0RmtQFG-ZAAOkMT2StPRUWQQPBRdzZ71bXyG7IqYL7NGSJl91qoogOgw/exec" target="_blank" rel="noopener">Reserve a CS Wednesday ↗</a>
+          <a href="calendar.html">View calendar</a>
+        </div>
+        <p class="signup-help">Opens in a new tab. Sign in with your HCPS school account.</p>
+        <p class="signup-help">You’ll receive a submission email. Approval and a calendar invitation follow once your request is approved.</p>
       </div>
-      <iframe id="csw-booking" title="Choose a CS Wednesday and reserve lunch"></iframe>
-      <p class="booking-fallback">
-        <a id="csw-open-form" target="_blank" rel="noopener">Open signup in a separate tab</a>
-      </p>
-      <noscript>
-        Please enable JavaScript to see the signup calendar. Contact a CSHS officer for help.
-      </noscript>
     </section>
     <section class="cs-wednesday" id="cs-wednesday">
       <div class="cs-wednesday-container">

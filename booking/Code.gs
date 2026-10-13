@@ -1,8 +1,9 @@
 /** CS Wednesdays: deploy as calendar owner; private helpers end in _. */
 function doGet(e) {
-  var calendarView = e && e.parameter && e.parameter.view === 'calendar';
-  return HtmlService.createHtmlOutputFromFile(calendarView ? 'Calendar' : 'Widget')
-    .setTitle(calendarView ? 'CSHS Calendar' : 'CS Wednesdays')
+  var view = e && e.parameter && e.parameter.view;
+  var calendarView = view === 'calendar';
+  return HtmlService.createHtmlOutputFromFile(view === 'tutoring' ? 'TutoringPage' : calendarView ? 'Calendar' : 'Widget')
+    .setTitle(view === 'tutoring' ? 'CS Tutoring' : calendarView ? 'CSHS Calendar' : 'CS Wednesdays')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
@@ -431,7 +432,7 @@ function requestCode(email) {
     }
     MailApp.sendEmail(
       email,
-      'Your CS Wednesdays verification code',
+      'Your CSHS verification code',
       'Your code is ' +
         code +
         '. It expires in 10 minutes.\n\nEnter it only on the CSHS signup page. If you did not request this, ignore this email.'
@@ -577,6 +578,12 @@ function organizerApproveBooking(token, id) {
       })
     )
       throw new Error('This date is unavailable. Resolve the calendar conflict before approving.');
+    if (typeof tutoringRecords_ === 'function' && tutoringRecords_().some(function (session) {
+      return session.kind === 'request' && session.status === 'approved' &&
+        [session.email, session.tutorEmail].indexOf(r.email) >= 0 &&
+        at_(session.date, session.start) < at_(r.date, c.end) &&
+        at_(session.date, session.end) > at_(r.date, c.start);
+    })) throw new Error('This presenter already has a tutoring session at this time.');
     if (r.status === 'pending') {
       r.status = 'booked';
       r.approvedAt = new Date().toISOString();

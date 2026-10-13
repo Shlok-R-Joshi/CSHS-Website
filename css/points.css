@@ -71,6 +71,22 @@
   text-align: center;
 }
 
+.points-link {
+  padding: 14px 20px;
+  border-radius: 10px;
+  background: white;
+  color: #1b3b6f;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.points-link:hover,
+.points-link:focus-visible {
+  background: #d0e1fd;
+  text-decoration: underline;
+}
+
 form {
   display: flex;
   flex-direction: column;

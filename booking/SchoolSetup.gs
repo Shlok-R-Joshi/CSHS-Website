@@ -58,4 +58,5 @@ function setALunchHours() {
 function runEmailReminders() {
   requireSchoolOwner_();
   notificationsTick_();
+  runTutoringReminders_();
 }

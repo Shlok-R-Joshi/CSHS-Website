@@ -21,7 +21,7 @@
         ? '../booking/Calendar.html'
         : '../booking/Widget.html') + query;
   const fallback = document.getElementById('csw-open-form');
-  fallback.href = frame.src;
+  fallback.href = live ? config.webAppUrl + (calendarView ? '?view=calendar' : '') : frame.src;
   fallback.textContent = calendarView ? 'Open calendar in a new tab' : 'Open signup in a new tab';
   const notice = document.getElementById('csw-setup-notice');
   let connected = false;
@@ -29,10 +29,11 @@
   const connectionTimer = live
     ? setTimeout(() => {
         if (connected) return;
+        frame.hidden = true;
         notice.hidden = false;
         notice.textContent =
-          'Not loading? Open the link below and sign in with your HCPS school account.';
-      }, 20000)
+          'Open the calendar below to sign in with your HCPS school account. Then refresh this page.';
+      }, 10000)
     : null;
   window.addEventListener('message', (event) => {
     const trustedOrigin = live
@@ -58,6 +59,7 @@
       // A Google sign-in/access-denied page also fires iframe load. Only the widget
       // knows this per-frame nonce and can confirm that the actual form rendered.
       connected = true;
+      frame.hidden = false;
       clearTimeout(connectionTimer);
       if (live) notice.hidden = true;
     }
