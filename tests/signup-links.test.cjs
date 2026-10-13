@@ -44,10 +44,12 @@ test('disabled tutoring hides its signup link with a help message', () => {
   assert.match(result['tutoring-notice'].textContent, /being set up/);
 });
 
-test('both public signup pages work as separate-tab links even without JavaScript', () => {
+test('signup links work without JavaScript; CS Wednesday opens directly in the same tab', () => {
   for (const name of ['CSW', 'tutoring']) {
     const html = fs.readFileSync(path.join(root, 'html', name + '.html'), 'utf8');
-    assert.match(html, /href="https:\/\/script\.google\.com[^" ]*" target="_blank" rel="noopener"/);
+    assert.match(html, /href="https:\/\/script\.google\.com[^" ]*"/);
+    if (name === 'CSW') assert.doesNotMatch(html.match(/<a[^>]+id="csw-open-form"[^>]*>/)[0], /target=/);
+    else assert.match(html, /target="_blank" rel="noopener"/);
     assert.doesNotMatch(html, /<iframe[^>]*(?:csw-booking|tutoring-frame)/s);
     assert.match(html, /signup-links\.js/);
   }

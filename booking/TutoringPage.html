@@ -339,11 +339,6 @@
             <fieldset>
               <legend>Courses you have taken and can tutor</legend>
               <div id="tutor-courses"></div>
-              <label
-                >Another completed CS course (optional)<input
-                  name="other"
-                  maxlength="80"
-              /></label>
             </fieldset>
             <fieldset>
               <legend>When are you available?</legend>
@@ -380,11 +375,6 @@
           <div id="admin-list"></div>
           <details>
             <summary>Officer access</summary>
-            <p>
-              Uses the same officer access as CS Wednesdays. The owner approves
-              matches; managers can cancel sessions and record attendance.
-              Viewers can only read.
-            </p>
             <a
               href="https://drhscit.org/cshs/html/CSW.html?manage=1#signup"
               target="_blank"
@@ -715,6 +705,18 @@
               a.rel = "noopener";
               box.append(a);
             }
+            if (!admin && ["pending", "approved", "active"].includes(r.status)) {
+              const changes = element("a", "Request changes");
+              changes.href = "mailto:hcps-joshisr1@henricostudents.org?subject=" +
+                encodeURIComponent("CS tutoring change request — " + r.name) +
+                "&body=" + encodeURIComponent(
+                  "Name: " + r.name + "\nSignup: " + r.id +
+                  "\nCourse: " + (r.course || r.courses.join(", ")) +
+                  "\nDate: " + (r.date || r.requestedDate || "Tutor registration") +
+                  "\n\nRequested changes: "
+                );
+              box.append(changes, element("p", "Opens an email to Shlok. Send your requested changes; your signup stays unchanged until they are processed.", "muted"));
+            }
             if (admin) {
               if (r.mail.length || r.inviteStatus)
                 detail(
@@ -905,6 +907,8 @@
           times("student-times");
           times("tutor-times");
           const select = document.querySelector("select.course");
+          option(select, "", "Select a course");
+          select.value = "";
           courses.forEach((c) => option(select, c, c));
           option(select, "Other", "Other");
           select.onchange = () => {
@@ -949,6 +953,7 @@
             e.preventDefault();
             action(async () => {
               const data = Object.fromEntries(new FormData(e.target));
+              if (!data.course) throw new Error("Select a course.");
               const availability = selected("student-times");
               if (!availability.length)
                 throw new Error("Choose your availability.");
@@ -973,7 +978,6 @@
             action(async () => {
               const data = Object.fromEntries(new FormData(e.target)),
                 choices = selected("tutor-courses");
-              if (data.other.trim()) choices.push(data.other.trim());
               if (!choices.length)
                 throw new Error("Choose at least one completed course.");
               const availability = selected("tutor-times");

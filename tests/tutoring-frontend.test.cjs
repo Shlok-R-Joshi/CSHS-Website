@@ -96,7 +96,7 @@ function app() {
   for (const id of ["student-times", "tutor-times", "tutor-courses"])
     get(id).querySelectorAll("*").find((e) => e.tag === "input").checked = true;
   return {
-    get, replies, calls, late,
+    get, replies, calls, late, course,
     async submit(id) {
       const target = get(id);
       target.onsubmit({ preventDefault() {}, target });
@@ -160,4 +160,31 @@ test("expired verification after saving preserves acknowledgement while hiding p
   assert.equal(h.get("workspace").hidden, true);
   assert.equal(h.get("verification").hidden, false);
   assert.equal(h.get("my-list").children.length, 0);
+});
+
+test("course starts unselected and an empty choice cannot submit", async () => {
+  const h = app();
+  assert.equal(h.course.value, "");
+  assert.equal(h.course.children[0].textContent, "Select a course");
+  h.get("help-form").data.course = "";
+  await h.submit("help-form");
+  assert.match(h.get("message").textContent, /Select a course/);
+  assert.equal(h.calls.length, 0);
+});
+
+test("active signups offer a change-request email without editing the reservation", async () => {
+  const h = app();
+  h.replies.tutoringSubmit = [{ id: "saved", status: "pending" }];
+  h.replies.tutoringDashboard = [{
+    email: "student@henricostudents.org", role: "", records: [{
+      id: "saved", kind: "request", status: "pending", name: "Student One",
+      email: "student@henricostudents.org", course: "AP Computer Science A",
+      requestedDate: "2026-10-15", availability: ["Thursday|A lunch"], details: "Arrays"
+    }]
+  }];
+  await h.submit("help-form");
+  const link = h.get("my-list").querySelectorAll("*").find(e => e.textContent === "Request changes");
+  assert.match(link.href, /^mailto:hcps-joshisr1@henricostudents.org\?/);
+  assert.match(decodeURIComponent(link.href), /Signup: saved[\s\S]*Requested changes:/);
+  assert.deepEqual(h.calls.map(c => c.method), ["tutoringSubmit", "tutoringDashboard"]);
 });

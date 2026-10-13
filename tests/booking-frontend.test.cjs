@@ -649,7 +649,7 @@ test('student reservations are read-only and email link carries reservation refe
   await h.click('verify');
   assert.equal(rowButton(h, 'my-bookings', 'Edit'), undefined);
   assert.equal(rowButton(h, 'my-bookings', 'Cancel signup'), undefined);
-  const link = rowButton(h, 'my-bookings', 'Email organizer about this reservation');
+  const link = rowButton(h, 'my-bookings', 'Request changes by email');
   assert.match(link.href, /^mailto:hcps-joshisr1@henricostudents.org/);
   assert(decodeURIComponent(link.href).includes('Reference: r1'));
   assert(

@@ -1,11 +1,11 @@
 # CS tutoring
 
-School-owned backend deployed as version 30 on October 12, 2026. `tutoringEnabled` is true. The combined `codex/cshs-complete-update` branch includes tutoring, separate-tab signup, team photos, and the points portal link. The website repository has not been pushed or published.
+School-owned backend deployed as version 31 on October 12, 2026. `tutoringEnabled` is true. The combined `codex/cshs-complete-update` branch includes tutoring, separate-tab signup, team photos, and the points portal link. The website repository has not been pushed or published.
 
 ## What it does
 
 - Students verify an HCPS email, choose a course, describe what they need help with, and give a preferred date and weekly availability.
-- Tutors verify their email and register courses they have already taken and the times they are available. An optional course name supports classes outside the four listed courses.
+- Tutors verify their email and register courses they have already taken and the times they are available. Students must select a course; tutors select from the listed completed courses.
 - Submission sends a receipt to the student/tutor and a notice to Shlok. It does not create a calendar invitation.
 - The owner chooses a tutor with a matching course and shared availability, confirms the school day and room, sets the time, and approves. Both participants receive approval emails and a private calendar invitation.
 - The system blocks past dates, weekends, known closures, mismatched availability, self-matching, and overlapping approved tutoring/CS Wednesday sessions for a known participant.
@@ -22,7 +22,7 @@ Serve the repository on port 8767 and open:
 
 `http://127.0.0.1:8767/html/tutoring.html`
 
-Both signup pages open the school-owned app in a new tab. School sign-in can still expire, but it can complete normally there instead of failing inside a website iframe. The calendar stays embedded, with a separate-tab fallback if it does not respond within ten seconds. A late successful response restores the calendar.
+CS Wednesday signup opens the school-owned app directly in the same tab; tutoring opens it in a new tab. School sign-in can still expire, but it can complete normally there instead of failing inside a website iframe. The calendar stays embedded, with a separate-tab fallback if it does not respond within ten seconds. A late successful response restores the calendar.
 
 For a local-only demonstration, open `http://127.0.0.1:8767/booking/TutoringPage.html?demo=1`. It is explicitly labelled, uses invented people, makes no backend calls, and resets on refresh. It is not a substitute for server validation.
 
@@ -49,7 +49,7 @@ The Google Forms in the CS Tutoring Drive folder remain unchanged. Existing resp
 
 ## Tests
 
-Local validation: 114 automated checks passed, including the existing CS Wednesday suite, tutoring recovery, separate-tab links, and calendar fallback. Browser demo checks covered tutor registration, multiline student requests, and matching/approval. Automated checks do not verify real Google email or Calendar delivery.
+Local validation: 116 automated checks passed, including the existing CS Wednesday suite, tutoring recovery, separate-tab links, and calendar fallback. Browser demo checks covered tutor registration, multiline student requests, and matching/approval. Automated checks do not verify real Google email or Calendar delivery.
 
 `node --test tests/*.test.cjs`
 
@@ -79,3 +79,10 @@ Review the local site at `http://127.0.0.1:8767/html/tutoring.html`. The shared 
 - The tutoring landing page and mobile menu were checked at desktop and 390-pixel phone widths. Shared navigation collapses before the full menu would overflow.
 - Team photos and the points portal button were brought into the same branch. The obsolete points message and unused login handler were removed.
 - 114 local tests pass. No new test emails or calendar bookings were created during this final integration check. The owner-only delivery evidence and two-account limitations above still apply.
+
+## Signup refinements — October 12, 2026
+
+- CS Wednesday button navigates directly in the same tab; removed the two requested explanatory paragraphs.
+- Tutoring starts with Select a course and rejects an empty choice. Removed the optional extra tutor course field and officer-role explanation.
+- Active tutoring signups include Request changes; CS Wednesday calls its existing email link Request changes by email. These open a prefilled message to the school organizer. Users must send it; no reservation changes automatically.
+- School backend version 31 includes the two form updates. 116 tests pass. No access or booking state changed.

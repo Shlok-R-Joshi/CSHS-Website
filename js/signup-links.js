@@ -10,7 +10,7 @@
     if (/^\d{4}-\d{2}-\d{2}$/.test(date)) url.searchParams.set('date', date);
     if (params.get('manage') === '1') url.searchParams.set('manage', '1');
     signup.href = url.href;
-    if (params.get('manage') === '1') signup.textContent = 'Open organizer dashboard ↗';
+    if (params.get('manage') === '1') signup.textContent = 'Open organizer dashboard';
   }
 
   const tutoring = document.getElementById('tutoring-open');
