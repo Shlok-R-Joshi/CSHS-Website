@@ -49,6 +49,154 @@ function setup() {
   };
   return h;
 }
+
+test("busy server rejects a request without side effects and permits the same retry", () => {
+  const h = setup(), input = h.request(), before = h.mail.length;
+  h.setLock(true);
+  assert.throws(() => h.c.tutoringSubmit(input), /being processed/);
+  assert.equal(h.c.tutoringRecords_().length, 0);
+  assert.equal(h.mail.length, before);
+  h.setLock(false);
+  h.c.tutoringSubmit(input);
+  assert.equal(h.c.tutoringRecords_().length, 1);
+});
+
+test("expired verification cannot replay a successful submission or read private records", () => {
+  const h = setup(), input = h.request();
+  h.c.tutoringSubmit(input);
+  h.cache.delete("auth:" + h.c.digest_(h.student));
+  const before = h.mail.length;
+  assert.throws(() => h.c.tutoringSubmit(input), /expired/);
+  assert.throws(() => h.c.tutoringDashboard(h.student), /expired/);
+  assert.equal(h.c.tutoringRecords_().length, 1);
+  assert.equal(h.mail.length, before);
+});
+
+test("revoked manager access takes effect even with an existing verified session", () => {
+  const h = setup(), p = h.pair(), token = h.login("manager@henricostudents.org");
+  const key = "dashboard-access:manager@henricostudents.org";
+  h.props.set(key, JSON.stringify({ role: "manager" }));
+  assert.equal(h.c.tutoringDashboard(token).records.length, 2);
+  h.props.delete(key);
+  assert.equal(h.c.tutoringDashboard(token).records.length, 0);
+  assert.throws(() => h.c.tutoringClose(token, p.id, "cancel"), /permission/);
+  assert.equal(h.c.tutoringRead_(p.id).status, "pending");
+});
+
+test("cancelling during a Calendar outage never sends a delayed approval or creates an invite", () => {
+  const h = setup(), p = h.pair();
+  h.setInviteFailure(true);
+  h.c.tutoringApprove(p);
+  h.c.tutoringClose(h.owner(), p.id, "cancel");
+  h.setInviteFailure(false);
+  h.c.runTutoringReminders_();
+  h.c.runTutoringReminders_();
+  assert.equal(h.inviteCalls.length, 0);
+  assert.equal(h.c.tutoringRead_(p.id).status, "cancelled");
+  assert.equal(h.c.tutoringRead_(p.id).mail["approval-0"].status, "skipped");
+  assert(!h.mail.some(m => m[0].to === "student@henricostudents.org" && m[0].subject?.includes("session approved")));
+});
+
+test("lost cancellation response recovers without a second Calendar deletion", () => {
+  const h = setup(), p = h.pair();
+  h.c.tutoringApprove(p);
+  const remove = h.c.Calendar.Events.remove;
+  h.c.Calendar.Events.remove = (...args) => {
+    remove(...args);
+    throw Error("response lost after deleting event");
+  };
+  h.c.tutoringClose(h.owner(), p.id, "cancel");
+  h.c.runTutoringReminders_();
+  assert.equal(h.invites.size, 0);
+  assert.equal(h.inviteCalls.filter(c => c.type === "remove").length, 1);
+  assert.equal(h.c.tutoringRead_(p.id).inviteStatus, "sent");
+});
+
+test("stale approval cannot revive a cancelled request or use a deactivated tutor", () => {
+  const h = setup(), p = h.pair();
+  h.c.tutoringClose(h.owner(), p.id, "cancel");
+  assert.throws(() => h.c.tutoringApprove(p), /no longer pending/);
+  const next = h.c.tutoringSubmit(h.request());
+  h.c.tutoringClose(h.owner(), p.tutorId, "deactivate");
+  assert.throws(() => h.c.tutoringApprove({ ...p, id: next.id }), /active tutor/);
+  assert.equal(h.invites.size, 0);
+});
+
+test("adjacent sessions are allowed but a one-minute overlap is blocked", () => {
+  const h = setup(), p = h.pair();
+  h.c.tutoringApprove(p);
+  const next = h.c.tutoringSubmit(h.request());
+  assert.throws(() => h.c.tutoringApprove({ ...p, id: next.id, start: "12:24", end: "12:55" }), /already has/);
+  h.c.tutoringApprove({ ...p, id: next.id, start: "12:25", end: "12:55" });
+  assert.equal(h.invites.size, 2);
+});
+
+test("quota recovery after the session starts cannot send stale approvals or invitations", () => {
+  const h = setup(), p = h.pair();
+  h.c.MailApp.getRemainingDailyQuota = () => 0;
+  h.setInviteFailure(true);
+  h.c.tutoringApprove(p);
+  h.setTime("2026-10-07T15:55:00Z");
+  h.setInviteFailure(false);
+  h.c.MailApp.getRemainingDailyQuota = () => 100;
+  h.c.runTutoringReminders_();
+  const r = h.c.tutoringRead_(p.id);
+  assert.equal(r.inviteStatus, "expired");
+  assert.equal(r.mail["approval-0"].status, "skipped");
+  assert.equal(h.invites.size, 0);
+});
+
+test("full storage rejects new requests before sending receipts and allows retry after space is freed", () => {
+  const h = setup(), input = h.request(), before = h.mail.length;
+  h.props.set("existing-data", "x".repeat(150000));
+  assert.throws(() => h.c.tutoringSubmit(input), /storage/);
+  assert.equal(h.c.tutoringRecords_().length, 0);
+  assert.equal(h.mail.length, before);
+  h.props.delete("existing-data");
+  h.c.tutoringSubmit(input);
+  assert.equal(h.c.tutoringRecords_().length, 1);
+});
+
+test("repeated attendance clicks record hours and the organizer notification only once", () => {
+  const h = setup(), p = h.pair();
+  h.c.tutoringApprove(p);
+  h.setTime("2026-10-07T16:25:00Z");
+  const token = h.owner();
+  h.c.tutoringClose(token, p.id, "complete");
+  const before = h.mail.length, saved = h.props.get("tutoring:" + p.id);
+  h.c.tutoringClose(token, p.id, "complete");
+  assert.equal(h.c.tutoringRead_(p.id).hours, 0.5);
+  assert.equal(h.props.get("tutoring:" + p.id), saved);
+  assert.equal(h.mail.length, before);
+});
+
+test("winter sessions use Eastern standard time after daylight saving ends", () => {
+  const h = setup(), p = h.pair();
+  h.c.tutoringApprove({ ...p, date: "2026-11-04" });
+  const event = [...h.invites.values()][0];
+  assert.equal(event.start.dateTime, "2026-11-04T16:55:00.000Z");
+  assert.equal(event.end.dateTime, "2026-11-04T17:25:00.000Z");
+  h.setTime("2026-11-04T15:55:00Z");
+  h.c.runTutoringReminders_();
+  assert.equal(h.mail.filter(m => m[0].subject?.includes("Tutoring reminder")).length, 2);
+});
+
+test("approval exactly at session start is rejected without creating an invitation", () => {
+  const h = setup(), p = h.pair();
+  h.setTime("2026-10-07T15:55:00Z");
+  assert.throws(() => h.c.tutoringApprove({ ...p, token: h.owner() }), /future session/);
+  assert.equal(h.c.tutoringRead_(p.id).status, "pending");
+  assert.equal(h.invites.size, 0);
+});
+
+test("approval less than an hour before a session does not send retroactive reminders", () => {
+  const h = setup(), p = h.pair();
+  h.setTime("2026-10-07T15:10:00Z");
+  h.c.tutoringApprove({ ...p, token: h.owner() });
+  h.c.runTutoringReminders_();
+  assert.equal(h.invites.size, 1);
+  assert.equal(h.mail.filter(m => m[0].subject?.includes("Tutoring reminder")).length, 0);
+});
 test("new request sends receipt and organizer notice, never invites; retries do not duplicate", () => {
   const h = setup(),
     input = h.request(),

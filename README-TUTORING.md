@@ -1,6 +1,6 @@
 # CS tutoring
 
-School-owned backend deployed as version 31 on October 12, 2026. `tutoringEnabled` is true. The combined `codex/cshs-complete-update` branch includes tutoring, separate-tab signup, team photos, and the points portal link. The website repository has not been pushed or published.
+School-owned backend deployed as version 31 on October 12, 2026. `tutoringEnabled` is true. The combined `codex/cshs-complete-update` branch includes tutoring, separate-tab signup, team photos, and the points portal link. This branch is for review in the personal fork; publishing to the CIT website is a separate step.
 
 ## What it does
 
@@ -49,7 +49,7 @@ The Google Forms in the CS Tutoring Drive folder remain unchanged. Existing resp
 
 ## Tests
 
-Local validation: 116 automated checks passed, including the existing CS Wednesday suite, tutoring recovery, separate-tab links, and calendar fallback. Browser demo checks covered tutor registration, multiline student requests, and matching/approval. Automated checks do not verify real Google email or Calendar delivery.
+Local validation: 129 automated checks passed on October 20, 2026, including the existing CS Wednesday suite, tutoring recovery, separate-tab links, and calendar fallback. Additional cases cover revoked access, busy-server retries, delayed delivery, cancellation recovery, overlapping sessions, storage limits, repeated attendance actions, and daylight saving time. Earlier browser demo checks covered tutor registration, multiline student requests, and matching/approval. Automated checks do not verify real Google email or Calendar delivery.
 
 `node --test tests/*.test.cjs`
 
